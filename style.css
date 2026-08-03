@@ -1,37 +1,26 @@
 body {
-    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #f0f0f0;
     margin: 0;
-    background-color: #1e1e1e;
-    color: #ffffff;
+    font-family: Arial, sans-serif;
 }
 
 .calculator {
+    background-color: #fff;
     border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
 }
 
 .display {
-    background-color: #333;
+    background-color: #222;
+    color: #fff;
+    font-size: 2em;
     padding: 20px;
     text-align: right;
-    font-size: 2rem;
-    border-bottom: 1px solid #444;
-}
-
-.previous-operand {
-    color: #888;
-    font-size: 1.2rem;
-}
-
-.current-operand {
-    font-size: 2.5rem;
 }
 
 .buttons {
@@ -40,24 +29,44 @@ body {
     gap: 1px;
 }
 
-button {
-    padding: 20px;
-    font-size: 1.5rem;
+.btn {
+    background-color: #e0e0e0;
     border: none;
-    background-color: #444;
-    color: white;
+    padding: 20px;
+    font-size: 1.5em;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #555;
+.btn:hover {
+    background-color: #d0d0d0;
 }
 
-button:active {
-    background-color: #666;
+.btn[data-action="add"],
+.btn[data-action="subtract"],
+.btn[data-action="multiply"],
+.btn[data-action="divide"] {
+    background-color: #f9a825;
+    color: #fff;
 }
 
-.span-two {
+.btn[data-action="equals"] {
+    background-color: #ff5722;
+    color: #fff;
     grid-column: span 2;
+}
+
+.btn[data-action="clear"] {
+    background-color: #d32f2f;
+    color: #fff;
+}
+
+.btn[data-action="backspace"] {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.btn[data-action="percent"] {
+    background-color: #388e3c;
+    color: #fff;
 }
