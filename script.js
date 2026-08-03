@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const display = document.querySelector('#display');
     const buttons = document.querySelectorAll('.btn');
-
     let currentInput = '';
     let previousInput = '';
     let operator = null;
@@ -16,18 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (action) {
                 handleAction(action);
             }
+
+            updateDisplay();
         });
     });
 
     function handleNumber(value) {
         if (currentInput.includes('.') && value === '.') return;
         if (currentInput === '0' && value === '0') return;
-        if (currentInput === '0' && value !== '.') {
-            currentInput = value;
-        } else {
-            currentInput += value;
-        }
-        updateDisplay(currentInput);
+        currentInput = currentInput === '0' ? value : currentInput + value;
     }
 
     function handleAction(action) {
@@ -36,25 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentInput = '';
                 previousInput = '';
                 operator = null;
-                updateDisplay('0');
                 break;
             case 'backspace':
-                currentInput = currentInput.slice(0, -1);
-                updateDisplay(currentInput || '0');
+                currentInput = currentInput.slice(0, -1) || '0';
                 break;
             case 'percent':
                 currentInput = (parseFloat(currentInput) / 100).toString();
-                updateDisplay(currentInput);
                 break;
             case 'add':
             case 'subtract':
             case 'multiply':
             case 'divide':
-                if (currentInput === '' && previousInput !== '') {
-                    operator = action;
-                    return;
-                }
-                if (previousInput && operator) {
+                if (currentInput === '') return;
+                if (previousInput !== '') {
                     calculate();
                 }
                 operator = action;
@@ -62,8 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentInput = '';
                 break;
             case 'equals':
-                if (previousInput && currentInput && operator) {
+                if (operator && previousInput !== '') {
                     calculate();
+                    operator = null;
                 }
                 break;
         }
@@ -88,27 +79,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'divide':
                 if (current === 0) {
-                    updateDisplay('Error');
-                    resetCalculator();
-                    return;
+                    result = 'Error';
+                } else {
+                    result = prev / current;
                 }
-                result = prev / current;
                 break;
+            default:
+                return;
         }
 
         currentInput = result.toString();
-        operator = null;
         previousInput = '';
-        updateDisplay(currentInput);
     }
 
-    function updateDisplay(value) {
-        display.textContent = value;
-    }
-
-    function resetCalculator() {
-        currentInput = '';
-        previousInput = '';
-        operator = null;
+    function updateDisplay() {
+        display.textContent = currentInput || '0';
     }
 });

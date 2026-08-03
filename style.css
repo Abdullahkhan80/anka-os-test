@@ -12,9 +12,10 @@ body {
 .calculator {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 20px;
     width: 320px;
 }
@@ -55,13 +56,4 @@ body {
 
 .operator:hover {
     background-color: #e64a19;
-}
-
-.equals {
-    grid-column: span 2;
-    background-color: #4caf50;
-}
-
-.equals:hover {
-    background-color: #388e3c;
 }
