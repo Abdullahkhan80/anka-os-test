@@ -1,101 +1,101 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const display = document.querySelector('#display');
+    const display = document.getElementById('display');
     const buttons = document.querySelectorAll('.btn');
     let currentInput = '';
     let previousInput = '';
-    let operator = null;
+    let operator = '';
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            const action = button.dataset.action;
-            const value = button.dataset.value;
+            const action = button.getAttribute('data-action');
+            const value = button.getAttribute('data-value');
 
             if (value) {
-                handleNumber(value);
-            } else if (action) {
-                handleAction(action);
+                if (currentInput === '0' && value !== '.') {
+                    currentInput = value;
+                } else {
+                    currentInput += value;
+                }
+                display.textContent = currentInput;
             }
 
-            updateDisplay();
+            if (action) {
+                switch (action) {
+                    case 'clear':
+                        currentInput = '';
+                        previousInput = '';
+                        operator = '';
+                        display.textContent = '0';
+                        break;
+                    case 'backspace':
+                        currentInput = currentInput.slice(0, -1) || '0';
+                        display.textContent = currentInput;
+                        break;
+                    case 'percent':
+                        currentInput = (parseFloat(currentInput) / 100).toString();
+                        display.textContent = currentInput;
+                        break;
+                    case 'add':
+                    case 'subtract':
+                    case 'multiply':
+                    case 'divide':
+                        if (currentInput === '' && previousInput !== '') {
+                            operator = action;
+                            display.textContent = previousInput + getOperatorSymbol(operator);
+                        } else {
+                            if (previousInput && operator) {
+                                currentInput = calculate(previousInput, currentInput, operator);
+                                display.textContent = currentInput;
+                            }
+                            operator = action;
+                            previousInput = currentInput;
+                            currentInput = '';
+                            display.textContent = previousInput + getOperatorSymbol(operator);
+                        }
+                        break;
+                    case 'equals':
+                        if (previousInput && operator) {
+                            currentInput = calculate(previousInput, currentInput, operator);
+                            display.textContent = currentInput;
+                            previousInput = '';
+                            operator = '';
+                        }
+                        break;
+                }
+            }
         });
     });
 
-    function handleNumber(value) {
-        if (currentInput.includes('.') && value === '.') return;
-        currentInput = currentInput === '0' ? value : currentInput + value;
-    }
-
-    function handleAction(action) {
-        switch (action) {
-            case 'clear':
-                currentInput = '';
-                previousInput = '';
-                operator = null;
-                break;
-            case 'backspace':
-                currentInput = currentInput.slice(0, -1) || '0';
-                break;
-            case 'percent':
-                currentInput = (parseFloat(currentInput) / 100).toString();
-                break;
-            case 'divide':
-            case 'multiply':
-            case 'subtract':
-            case 'add':
-                if (currentInput === '' && previousInput !== '') {
-                    operator = action;
-                } else {
-                    calculate();
-                    operator = action;
-                    previousInput = currentInput;
-                    currentInput = '';
-                }
-                break;
-            case 'equals':
-                calculate();
-                operator = null;
-                break;
-            case 'sqrt':
-                currentInput = Math.sqrt(parseFloat(currentInput)).toString();
-                break;
-            case 'square':
-                currentInput = Math.pow(parseFloat(currentInput), 2).toString();
-                break;
-            case 'inverse':
-                currentInput = (1 / parseFloat(currentInput)).toString();
-                break;
-        }
-    }
-
-    function calculate() {
-        let result;
-        const prev = parseFloat(previousInput);
-        const current = parseFloat(currentInput);
-
-        if (isNaN(prev) || isNaN(current)) return;
-
+    function calculate(a, b, operator) {
+        const numA = parseFloat(a);
+        const numB = parseFloat(b);
+        if (isNaN(numA) || isNaN(numB)) return 'Error';
         switch (operator) {
             case 'add':
-                result = prev + current;
-                break;
+                return (numA + numB).toString();
             case 'subtract':
-                result = prev - current;
-                break;
+                return (numA - numB).toString();
             case 'multiply':
-                result = prev * current;
-                break;
+                return (numA * numB).toString();
             case 'divide':
-                result = current === 0 ? 'Error' : prev / current;
-                break;
+                return numB === 0 ? 'Error' : (numA / numB).toString();
             default:
-                return;
+                return 'Error';
         }
-
-        currentInput = result.toString();
-        previousInput = '';
     }
 
-    function updateDisplay() {
-        display.textContent = currentInput || '0';
+    function getOperatorSymbol(operator) {
+        switch (operator) {
+            case 'add':
+                return ' + ';
+            case 'subtract':
+                return ' − ';
+            case 'multiply':
+                return ' × ';
+            case 'divide':
+                return ' ÷ ';
+            default:
+                return '';
+        }
     }
 });
