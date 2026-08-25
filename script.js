@@ -19,13 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleNumber(value) {
-        if (currentInput.includes('.') && value === '.') return;
         if (currentInput === '0' && value === '0') return;
-        if (currentInput === '0' && value !== '.') {
-            currentInput = value;
-        } else {
-            currentInput += value;
-        }
+        if (currentInput.includes('.') && value === '.') return;
+        currentInput += value;
         updateDisplay(currentInput);
     }
 
@@ -38,37 +34,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateDisplay('0');
                 break;
             case 'backspace':
-                currentInput = currentInput.slice(0, -1);
-                if (currentInput === '') currentInput = '0';
+                currentInput = currentInput.slice(0, -1) || '0';
                 updateDisplay(currentInput);
                 break;
-            case 'add':
-            case 'subtract':
-            case 'multiply':
+            case 'percent':
+                currentInput = (parseFloat(currentInput) / 100).toString();
+                updateDisplay(currentInput);
+                break;
             case 'divide':
-                if (currentInput === '' && previousInput === '') return;
-                if (operator && currentInput !== '') {
-                    calculate();
-                }
-                operator = action;
-                previousInput = currentInput;
-                currentInput = '';
+            case 'multiply':
+            case 'subtract':
+            case 'add':
+                setOperator(action);
                 break;
             case 'equals':
-                if (operator && currentInput !== '') {
-                    calculate();
-                    operator = null;
+                calculateResult();
+                break;
+            case 'sqrt':
+                currentInput = Math.sqrt(parseFloat(currentInput)).toString();
+                updateDisplay(currentInput);
+                break;
+            case 'square':
+                currentInput = Math.pow(parseFloat(currentInput), 2).toString();
+                updateDisplay(currentInput);
+                break;
+            case 'inverse':
+                currentInput = (1 / parseFloat(currentInput)).toString();
+                updateDisplay(currentInput);
+                break;
+            case 'negate':
+                currentInput = (-parseFloat(currentInput)).toString();
+                updateDisplay(currentInput);
+                break;
+            case 'decimal':
+                if (!currentInput.includes('.')) {
+                    currentInput += '.';
+                    updateDisplay(currentInput);
                 }
                 break;
         }
     }
 
-    function calculate() {
+    function setOperator(action) {
+        if (currentInput === '') return;
+        if (previousInput !== '') {
+            calculateResult();
+        }
+        operator = action;
+        previousInput = currentInput;
+        currentInput = '';
+    }
+
+    function calculateResult() {
+        if (operator === null || currentInput === '') return;
         let result;
         const prev = parseFloat(previousInput);
         const current = parseFloat(currentInput);
-
-        if (isNaN(prev) || isNaN(current)) return;
 
         switch (operator) {
             case 'add':
@@ -83,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'divide':
                 if (current === 0) {
                     updateDisplay('Error');
+                    resetCalculator();
                     return;
                 }
                 result = prev / current;
@@ -90,11 +112,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         currentInput = result.toString();
+        operator = null;
         previousInput = '';
         updateDisplay(currentInput);
     }
 
     function updateDisplay(value) {
         display.textContent = value;
+    }
+
+    function resetCalculator() {
+        currentInput = '';
+        previousInput = '';
+        operator = null;
     }
 });
