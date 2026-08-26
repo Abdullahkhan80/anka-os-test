@@ -16,9 +16,22 @@ const Calculator: React.FC = () => {
     setResult(null);
   };
 
+  const handleBackspace = () => {
+    setInput((prev) => prev.slice(0, -1));
+  };
+
+  const handlePercentage = () => {
+    try {
+      const evaluatedResult = Function(`'use strict'; return (${input}) / 100`)();
+      setResult(evaluatedResult);
+    } catch (error) {
+      setResult(null);
+      alert('Invalid expression');
+    }
+  };
+
   const handleCalculate = () => {
     try {
-      // Simple evaluation logic with basic arithmetic operations
       const evaluatedResult = Function(`'use strict'; return (${input})`)();
       setResult(evaluatedResult);
     } catch (error) {
@@ -38,6 +51,8 @@ const Calculator: React.FC = () => {
           <button key={btn} onClick={() => handleButtonClick(btn)}>{btn}</button>
         ))}
         <button onClick={handleClear}>C</button>
+        <button onClick={handleBackspace}>⌫</button>
+        <button onClick={handlePercentage}>%</button>
         <button onClick={handleCalculate}>=</button>
       </div>
     </div>
