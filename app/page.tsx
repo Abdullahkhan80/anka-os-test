@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import Calculator from "./components/Calculator";
+
 import Card from "./components/Card";
 import Button from "./components/Button";
 
@@ -12,7 +12,7 @@ export default function Home() {
         <Card title="Welcome to My App" content="This is a simple application to demonstrate a modern UI." />
         <Button label="Click Me" onClick={() => alert('Button clicked!')} />
         
-        <Calculator />
+        
 
       </main>
     </div>
