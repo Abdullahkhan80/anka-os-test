@@ -4,10 +4,12 @@ const SupportSidebar = () => {
   return (
     <aside className="support-sidebar">
       <nav>
-        <ul>
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Tickets</a></li>
-          <li><a href="#">Settings</a></li>
+        <ul className="space-y-2">
+          <li><a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">Dashboard</a></li>
+          <li><a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">Tickets</a></li>
+          <li><a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">Settings</a></li>
+          <li><a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">Reports</a></li>
+          <li><a href="#" className="block py-2 px-4 rounded hover:bg-gray-700">Help</a></li>
         </ul>
       </nav>
     </aside>

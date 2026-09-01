@@ -9,8 +9,9 @@ interface SupportTicketProps {
 const SupportTicket: React.FC<SupportTicketProps> = ({ id, title, status }) => {
   return (
     <div className="support-ticket">
-      <h2>{title}</h2>
-      <p>Status: {status}</p>
+      <h2 className="text-lg font-semibold">{title}</h2>
+      <p className="text-sm text-gray-500">Status: {status}</p>
+      <p className="text-sm text-gray-500">Ticket ID: {id}</p>
     </div>
   );
 };
